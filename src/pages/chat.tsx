@@ -8,7 +8,7 @@ export default function ChatPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Chat com IA</h1>
           <p className="mt-2 text-gray-600">
-            Use nosso assistente virtual para receber dicas personalizadas sobre como melhorar seu perfil do LinkedIn
+            Use nossa assistente virtual para receber dicas personalizadas sobre como melhorar seu perfil do LinkedIn
           </p>
         </div>
         

@@ -14,7 +14,7 @@ const INITIAL_MESSAGES: Message[] = [
   {
     id: nanoid(),
     role: 'assistant',
-    content: 'Olá! Sou seu assistente de otimização de LinkedIn. Como posso ajudar você hoje? Posso dar dicas sobre seu perfil, sugerir melhorias para suas experiências profissionais, ou ajudar com palavras-chave estratégicas.'
+    content: 'Olá! Sou sua assistente de otimização de LinkedIn. Como posso ajudar você hoje? Posso dar dicas sobre seu perfil, sugerir melhorias para suas experiências profissionais, ou ajudar com palavras-chave estratégicas.'
   }
 ];
 

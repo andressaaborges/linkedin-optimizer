@@ -6,6 +6,9 @@ import ChatPage from './pages/chat';
 import ProfileAnalysisPage from './pages/profile-analysis';
 import { useEffect, useState } from 'react';
 import { supabase } from './lib/supabase';
+import CareerTipsPage from './pages/career-tips';
+import CommunitiesPage from './pages/communities';
+import LearningPage from './pages/learning';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -39,6 +42,18 @@ function App() {
           <Route 
             path="/profile-analysis" 
             element={isAuthenticated ? <ProfileAnalysisPage /> : <Navigate to="/login" replace />} 
+          />
+          <Route 
+            path="/dicas-carreira" 
+            element={isAuthenticated ? <CareerTipsPage /> : <Navigate to="/login" replace />} 
+          />
+          <Route 
+            path="/comunidades" 
+            element={isAuthenticated ? <CommunitiesPage /> : <Navigate to="/login" replace />} 
+          />
+          <Route 
+            path="/conteudo" 
+            element={isAuthenticated ? <LearningPage /> : <Navigate to="/login" replace />} 
           />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>

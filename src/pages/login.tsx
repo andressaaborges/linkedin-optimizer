@@ -12,7 +12,7 @@ export default function LoginPage() {
           LinkedIn Profile Optimizer
         </h1>
         <p className="text-gray-600 max-w-md mx-auto">
-          Maximize your professional presence with AI-powered insights and recommendations
+          Maximize sua presença profissional com insights e recomendações impulsionados por IA.
         </p>
       </div>
       <AuthForm />

@@ -1,62 +1,158 @@
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
+import { useProfile } from '@/lib/hooks/use-profile';
+import { useProgress } from '@/lib/hooks/use-progress';
+import { Link } from 'react-router-dom';
+import {
+  UserCheck,
+  MessageSquare,
+  Users,
+  BookOpen,
+  GraduationCap,
+  ArrowRight
+} from 'lucide-react';
 
 export default function DashboardPage() {
+  const { profile, loading: profileLoading } = useProfile();
+  const { progress, loading: progressLoading } = useProgress();
+
+  if (profileLoading || progressLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout>
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          Bem-vindo ao LinkedIn Optimizer
-        </h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Welcome Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">
+            Boas vindas{profile?.full_name ? `, ${profile.full_name}` : ''}!
+          </h1>
+          <p className="mt-2 text-gray-600">
+            Acompanhe seu progresso e continue otimizando seu perfil profissional
+          </p>
+        </div>
+
+        {/* Progress Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              Análise Rápida
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Comece otimizando seu perfil do LinkedIn com nossa análise inteligente.
-            </p>
-            <button className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
-              Iniciar Análise
-            </button>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium text-gray-900">Perfil</h3>
+              <UserCheck className="w-6 h-6 text-indigo-600" />
+            </div>
+            <div className="mb-2">
+              <div className="flex justify-between text-sm mb-1">
+                <span>Completude</span>
+                <span>{progress?.profile_completion_percentage}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-indigo-600 h-2 rounded-full"
+                  style={{ width: `${progress?.profile_completion_percentage}%` }}
+                />
+              </div>
+            </div>
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              Chat com IA
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Receba dicas personalizadas para melhorar cada seção do seu perfil.
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium text-gray-900">Chat IA</h3>
+              <MessageSquare className="w-6 h-6 text-indigo-600" />
+            </div>
+            <p className="text-2xl font-semibold text-gray-900">
+              {progress?.chat_interactions || 0}
             </p>
-            <button className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
-              Iniciar Chat
-            </button>
+            <p className="text-sm text-gray-600">interações realizadas</p>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium text-gray-900">Comunidades</h3>
+              <Users className="w-6 h-6 text-indigo-600" />
+            </div>
+            <p className="text-2xl font-semibold text-gray-900">
+              {progress?.joined_communities || 0}
+            </p>
+            <p className="text-sm text-gray-600">comunidades participando</p>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium text-gray-900">Aprendizado</h3>
+              <BookOpen className="w-6 h-6 text-indigo-600" />
+            </div>
+            <p className="text-2xl font-semibold text-gray-900">
+              {progress?.completed_resources || 0}
+            </p>
+            <p className="text-sm text-gray-600">recursos completados</p>
           </div>
         </div>
 
-        <div className="mt-8 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Progresso de Otimização
-          </h2>
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <Link
+            to="/profile"
+            className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:border-indigo-300 transition-colors group"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium text-gray-900">Complete seu Perfil</h3>
+              <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-indigo-600 transition-colors" />
+            </div>
+            <p className="text-gray-600">
+              Mantenha seu perfil atualizado para receber recomendações mais precisas
+            </p>
+          </Link>
+
+          <Link
+            to="/chat"
+            className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:border-indigo-300 transition-colors group"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium text-gray-900">Converse com a IA</h3>
+              <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-indigo-600 transition-colors" />
+            </div>
+            <p className="text-gray-600">
+              Receba dicas personalizadas para otimizar seu perfil do LinkedIn
+            </p>
+          </Link>
+        </div>
+
+        {/* Recent Activity */}
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">Atividade Recente</h2>
           <div className="space-y-4">
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium text-gray-700">Perfil Completo</span>
-                <span className="text-sm font-medium text-gray-700">70%</span>
+            {progress?.chat_interactions ? (
+              <div className="flex items-center text-gray-600">
+                <MessageSquare className="w-5 h-5 mr-3 text-indigo-600" />
+                <span>Você teve {progress.chat_interactions} interações com a IA</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-indigo-600 h-2 rounded-full" style={{ width: '70%' }}></div>
+            ) : null}
+
+            {progress?.completed_resources ? (
+              <div className="flex items-center text-gray-600">
+                <BookOpen className="w-5 h-5 mr-3 text-indigo-600" />
+                <span>Você completou {progress.completed_resources} recursos de aprendizado</span>
               </div>
-            </div>
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium text-gray-700">Otimização SEO</span>
-                <span className="text-sm font-medium text-gray-700">85%</span>
+            ) : null}
+
+            {progress?.joined_communities ? (
+              <div className="flex items-center text-gray-600">
+                <Users className="w-5 h-5 mr-3 text-indigo-600" />
+                <span>Você participa de {progress.joined_communities} comunidades</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-indigo-600 h-2 rounded-full" style={{ width: '85%' }}></div>
+            ) : null}
+
+            {progress?.implemented_suggestions ? (
+              <div className="flex items-center text-gray-600">
+                <GraduationCap className="w-5 h-5 mr-3 text-indigo-600" />
+                <span>Você implementou {progress.implemented_suggestions} sugestões de melhoria</span>
               </div>
-            </div>
+            ) : null}
           </div>
         </div>
       </div>

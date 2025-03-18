@@ -24,9 +24,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Perfil', href: '/profile', icon: User },
+    { name: 'Perfil', href: '/perfil', icon: User },
     { name: 'Chat IA', href: '/chat', icon: MessageSquare },
-    { name: 'Análise de Perfil', href: '/profile-analysis', icon: UserCheck },
+    { name: 'Análise de Perfil', href: '/analise-perfil', icon: UserCheck },
     { name: 'Dicas de Carreira', href: '/dicas-carreira', icon: GraduationCap },
     { name: 'Comunidades', href: '/comunidades', icon: Users },
     { name: 'Conteúdo Recomendado', href: '/conteudo', icon: BookOpen },

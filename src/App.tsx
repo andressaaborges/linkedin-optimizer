@@ -9,6 +9,7 @@ import { supabase } from './lib/supabase';
 import CareerTipsPage from './pages/career-tips';
 import CommunitiesPage from './pages/communities';
 import LearningPage from './pages/learning';
+import Profile from './pages/profile';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -34,6 +35,10 @@ function App() {
           <Route 
             path="/dashboard" 
             element={isAuthenticated ? <DashboardPage /> : <Navigate to="/login" replace />} 
+          />
+          <Route 
+            path="/profile" 
+            element={isAuthenticated ? <Profile /> : <Navigate to="/login" replace />} 
           />
           <Route 
             path="/chat" 

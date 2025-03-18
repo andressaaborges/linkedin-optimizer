@@ -37,7 +37,7 @@ function App() {
             element={isAuthenticated ? <DashboardPage /> : <Navigate to="/login" replace />} 
           />
           <Route 
-            path="/profile" 
+            path="/perfil" 
             element={isAuthenticated ? <Profile /> : <Navigate to="/login" replace />} 
           />
           <Route 
@@ -45,7 +45,7 @@ function App() {
             element={isAuthenticated ? <ChatPage /> : <Navigate to="/login" replace />} 
           />
           <Route 
-            path="/profile-analysis" 
+            path="/analise-perfil" 
             element={isAuthenticated ? <ProfileAnalysisPage /> : <Navigate to="/login" replace />} 
           />
           <Route 

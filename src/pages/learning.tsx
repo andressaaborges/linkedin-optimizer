@@ -36,7 +36,7 @@ export default function LearningPage() {
         <div className="mb-8 space-y-4">
           <div>
             <h3 className="text-sm font-medium text-gray-700 mb-2">Tipo</h3>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setSelectedType(null)}
                 className={`px-4 py-2 rounded-md text-sm font-medium ${
@@ -65,7 +65,7 @@ export default function LearningPage() {
 
           <div>
             <h3 className="text-sm font-medium text-gray-700 mb-2">Nível</h3>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setSelectedLevel(null)}
                 className={`px-4 py-2 rounded-md text-sm font-medium ${
@@ -106,12 +106,12 @@ export default function LearningPage() {
                   key={resource.id}
                   className="bg-white p-6 rounded-lg shadow-sm border border-gray-200"
                 >
-                  <div className="flex justify-between items-start mb-4">
+                  <div className="flex flex-wrap justify-between items-start mb-4">
                     <div>
                       <h2 className="text-xl font-semibold text-gray-800 mb-2">
                         {resource.title}
                       </h2>
-                      <div className="flex gap-2 mb-4">
+                      <div className="flex flex-wrap gap-2 mb-4">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
                           {resource.type}
                         </span>
@@ -153,7 +153,7 @@ export default function LearningPage() {
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                  <div className="flex flex-wrap gap-4 items-center justify-between pt-4 border-t border-gray-200">
                     <button
                       onClick={() =>
                         updateLearningProgress(resource.id, {

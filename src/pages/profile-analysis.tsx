@@ -54,7 +54,7 @@ export default function ProfileAnalysisPage() {
               <label htmlFor="profileUrl" className="block text-sm font-medium text-gray-700 mb-2">
                 URL do Perfil LinkedIn
               </label>
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <input
                   type="url"
                   id="profileUrl"
@@ -67,7 +67,7 @@ export default function ProfileAnalysisPage() {
                 <button
                   type="submit"
                   disabled={isAnalyzing}
-                  className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 justify-center"
                 >
                   {isAnalyzing ? (
                     <>

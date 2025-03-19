@@ -16,7 +16,6 @@ export default function CommunitiesPage() {
     return true;
   });
 
-
   return (
     <DashboardLayout>
       <div className="max-w-5xl mx-auto">
@@ -84,7 +83,7 @@ export default function CommunitiesPage() {
                     ))} */}
                   </div>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                  <div className="flex flex-wrap gap-2 items-center justify-between pt-4 border-t border-gray-200">
                     <button
                       onClick={() =>
                         updateCommunityInteraction(community.id, {

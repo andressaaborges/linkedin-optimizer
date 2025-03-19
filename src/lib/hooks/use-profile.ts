@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
 import { toast } from 'react-hot-toast';
 import { getProfile, updateProfile, type Profile } from '@/services/profile';
 

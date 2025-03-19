@@ -8,8 +8,7 @@ import {
   Users,
   BookOpen,
   GraduationCap,
-  ArrowRight,
-  Target
+  ArrowRight
 } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -40,7 +39,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Progress Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex flex-col-reverse gap-2 items-start justify-between mb-4">
               <h3 className="text-lg font-medium text-gray-900">Perfil</h3>
@@ -93,7 +92,7 @@ export default function DashboardPage() {
             <p className="text-sm text-gray-600">recursos completados</p>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          {/* <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex flex-col-reverse gap-2 items-start justify-between mb-4">
               <h3 className="text-lg font-medium text-gray-900">Carreira</h3>
               <Target className="w-6 h-6 text-indigo-600" />
@@ -102,7 +101,7 @@ export default function DashboardPage() {
               {progress?.implemented_suggestions || 0}
             </p>
             <p className="text-sm text-gray-600">dicas implementadas</p>
-          </div>
+          </div> */}
         </div>
 
         {/* Quick Actions */}

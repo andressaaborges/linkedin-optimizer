@@ -96,10 +96,10 @@ export function useCareerTips() {
         }
       }));
 
-      toast.success('Progress updated');
+      toast.success('Atualizado com sucesso');
     } catch (error) {
       console.error('Error updating tip interaction:', error);
-      toast.error('Failed to update progress');
+      toast.error('Falha ao atualizar');
     }
   }
 

@@ -100,10 +100,10 @@ export function useCommunities() {
         }
       }));
 
-      toast.success('Community status updated');
+      toast.success('Status de comunidade atualizado com sucesso');
     } catch (error) {
       console.error('Error updating community interaction:', error);
-      toast.error('Failed to update community status');
+      toast.error('Falha ao atualizar status de comunidade');
     }
   }
 

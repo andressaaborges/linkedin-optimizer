@@ -39,7 +39,7 @@ export function useProgress() {
       setProgress(data);
     } catch (error) {
       console.error('Error fetching progress:', error);
-      toast.error('Failed to load progress data');
+      toast.error('Você precisa criar seu perfil');
     } finally {
       setLoading(false);
     }

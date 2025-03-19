@@ -101,10 +101,10 @@ export function useLearning() {
         }
       }));
 
-      toast.success('Progress updated');
+      toast.success('Atualizado com sucesso');
     } catch (error) {
       console.error('Error updating learning progress:', error);
-      toast.error('Failed to update progress');
+      toast.error('Falha ao atualizar');
     }
   }
 

@@ -27,29 +27,20 @@ export default function CommunitiesPage() {
           </p>
         </div>
 
-        {/* Filtros */}
-        <div className="mb-8 space-y-4">
+       {/* Filtros */}
+       <div className="mb-8 space-y-4">
           <div>
             <h3 className="text-sm font-semibold text-gray-700 mb-2.5">Filtre por categoria:</h3>
-            <div className="flex gap-2 flex-wrap">
-              <button
-                onClick={() => setSelectedTag(null)}
-                className={`px-4 py-2 rounded-md text-sm font-medium ${!selectedTag ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-              >
-                Todas
-              </button>
+            <select
+              className="px-4 py-2 rounded-md text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200"
+              value={selectedTag || 'Todos'}
+              onChange={(e) => setSelectedTag(e.target.value)}
+            >
+              <option value="Todas">Todas</option>
               {tags.map(tag => (
-                <button
-                  key={tag}
-                  onClick={() => setSelectedTag(tag)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium ${selectedTag === tag ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                >
-                  {tag}
-                </button>
+                <option key={tag} value={tag}>{tag}</option>
               ))}
-            </div>
+            </select>
           </div>
         </div>
 

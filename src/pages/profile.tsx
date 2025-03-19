@@ -5,6 +5,7 @@ import { X, Plus, Save } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { supabase } from '@/lib/supabase';
 import type { Profile } from '@/services/profile';
+import { createProfile } from '@/services/profile';
 
 export default function ProfilePage() {
   const { profile, loading, updateProfile } = useProfile();
@@ -53,19 +54,21 @@ export default function ProfilePage() {
 
       if (!existingProfile) {
         // Create new profile with form data
-        const { error: createError } = await supabase
-          .from('profiles')
-          .insert([{
-            id: user.id,
-            ...formData,
-            profile_completion_score: 0,
-            seo_optimization_score: 0,
-            updated_at: new Date().toISOString()
-          }]);
+        // const { error: createError } = await supabase
+        //   .from('profiles')
+        //   .insert([{
+        //     id: user.id,
+        //     ...formData,
+        //     profile_completion_score: 0,
+        //     seo_optimization_score: 0,
+        //     updated_at: new Date().toISOString()
+        //   }]);
 
-        if (createError) {
-          throw createError;
-        }
+        // if (createError) {
+        //   throw createError;
+        // }
+
+        await createProfile(user.id, formData);
 
         toast.success('Perfil criado com sucesso');
       } else {

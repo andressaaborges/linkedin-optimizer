@@ -46,7 +46,7 @@ export async function getProfile(): Promise<Profile | null> {
   }
 }
 
-async function createProfile(userId: string, initialData?: Partial<Profile>): Promise<Profile | null> {
+export async function createProfile(userId: string, initialData?: Partial<Profile>): Promise<Profile | null> {
   try {
     console.log('Creating new profile for user:', userId);
 

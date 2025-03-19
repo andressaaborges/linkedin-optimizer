@@ -33,14 +33,11 @@ export async function getProfile(): Promise<Profile | null> {
       .single();
 
     if (error) {
-      if (error.code === 'PGRST116') {
-        console.log('Profile not found, creating new one');
-        return await createProfile(user.id);
-      }
-      throw error;
+      console.log('Error fetching profile:', error);
+      return null;
     }
 
-    console.log('Existing profile found:', profile);
+    console.log('Profile found:', profile);
     return profile;
   } catch (error) {
     console.error('Error in getProfile:', error);
@@ -49,23 +46,24 @@ export async function getProfile(): Promise<Profile | null> {
   }
 }
 
-async function createProfile(userId: string): Promise<Profile | null> {
+async function createProfile(userId: string, initialData?: Partial<Profile>): Promise<Profile | null> {
   try {
     console.log('Creating new profile for user:', userId);
 
     const initialProfile = {
       id: userId,
-      full_name: null,
-      linkedin_url: null,
-      job_role: null,
-      career_goals: [],
-      skills: [],
-      interests: [],
+      full_name: initialData?.full_name || null,
+      linkedin_url: initialData?.linkedin_url || null,
+      job_role: initialData?.job_role || null,
+      career_goals: initialData?.career_goals || [],
+      skills: initialData?.skills || [],
+      interests: initialData?.interests || [],
       profile_completion_score: 0,
       seo_optimization_score: 0,
       updated_at: new Date().toISOString()
     };
 
+    // Create profile
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .insert([initialProfile])
@@ -88,7 +86,7 @@ async function createProfile(userId: string): Promise<Profile | null> {
       .from('user_progress')
       .insert([{
         user_id: userId,
-        profile_completion_percentage: 0,
+        profile_completion_percentage: calculateProfileCompleteness(profile),
         implemented_suggestions: 0,
         completed_resources: 0,
         joined_communities: 0,
@@ -276,12 +274,15 @@ export async function updateProfile(updates: Partial<Profile>): Promise<Profile 
       throw new Error('No user logged in');
     }
 
-    // First, ensure profile exists
+    // First, check if profile exists
     let profile = await getProfile();
+    
     if (!profile) {
-      console.log('No profile found, creating new one');
-      profile = await createProfile(user.id);
+      // Create new profile with the provided updates
+      console.log('No profile found, creating new one with data:', updates);
+      profile = await createProfile(user.id, updates);
       if (!profile) throw new Error('Failed to create profile');
+      return profile;
     }
 
     // Calculate completion score

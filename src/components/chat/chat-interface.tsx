@@ -3,6 +3,7 @@ import { SendHorizontal } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { generateLinkedInAdvice } from '@/lib/gemini';
 import { toast } from 'react-hot-toast';
+import { supabase } from '@/lib/supabase';
 
 interface Message {
   id: string;
@@ -14,7 +15,7 @@ const INITIAL_MESSAGES: Message[] = [
   {
     id: nanoid(),
     role: 'assistant',
-    content: 'Olá! Sou sua assistente de otimização de LinkedIn. Como posso ajudar você hoje? Posso dar dicas sobre seu perfil, sugerir melhorias para suas experiências profissionais, ou ajudar com palavras-chave estratégicas.'
+    content: 'Olá! Sou seu assistente de otimização de LinkedIn. Como posso ajudar você hoje? Posso dar dicas sobre seu perfil, sugerir melhorias para suas experiências profissionais, ou ajudar com palavras-chave estratégicas.'
   }
 ];
 
@@ -31,6 +32,26 @@ export function ChatInterface() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const saveChatHistory = async (message: string, response: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('chat_history')
+        .insert({
+          user_id: user.id,
+          message,
+          response,
+          created_at: new Date().toISOString()
+        });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error saving chat history:', error);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,6 +77,9 @@ export function ChatInterface() {
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+
+      // Save chat history
+      await saveChatHistory(input, response);
     } catch (error) {
       console.error('Erro ao processar mensagem:', error);
       toast.error('Erro ao processar sua mensagem. Por favor, tente novamente.');

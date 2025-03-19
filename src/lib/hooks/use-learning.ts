@@ -18,6 +18,7 @@ export interface UserLearningProgress {
   status: string;
   progress: number;
   completed_at: string | null;
+  last_interaction_at: string;
 }
 
 export function useLearning() {
@@ -84,6 +85,7 @@ export function useLearning() {
         .upsert({
           user_id: user.id,
           resource_id: resourceId,
+          last_interaction_at: new Date().toISOString(),
           ...updates
         });
 
@@ -94,7 +96,8 @@ export function useLearning() {
         [resourceId]: {
           ...prev[resourceId],
           ...updates,
-          resource_id: resourceId
+          resource_id: resourceId,
+          last_interaction_at: new Date().toISOString()
         }
       }));
 

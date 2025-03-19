@@ -16,6 +16,8 @@ export interface UserCommunity {
   community_id: string;
   is_interested: boolean;
   has_joined: boolean;
+  status: string;
+  last_interaction_at: string;
 }
 
 export function useCommunities() {
@@ -82,6 +84,7 @@ export function useCommunities() {
         .upsert({
           user_id: user.id,
           community_id: communityId,
+          last_interaction_at: new Date().toISOString(),
           ...updates
         });
 
@@ -92,7 +95,8 @@ export function useCommunities() {
         [communityId]: {
           ...prev[communityId],
           ...updates,
-          community_id: communityId
+          community_id: communityId,
+          last_interaction_at: new Date().toISOString()
         }
       }));
 

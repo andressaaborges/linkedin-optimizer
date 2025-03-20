@@ -50,23 +50,21 @@ export async function createProfile(userId: string, initialData?: Partial<Profil
   try {
     console.log('Creating new profile for user:', userId);
 
-    const initialProfile = {
-      id: userId,
-      full_name: initialData?.full_name || null,
-      linkedin_url: initialData?.linkedin_url || null,
-      job_role: initialData?.job_role || null,
-      career_goals: initialData?.career_goals || [],
-      skills: initialData?.skills || [],
-      interests: initialData?.interests || [],
-      profile_completion_score: 0,
-      seo_optimization_score: 0,
-      updated_at: new Date().toISOString()
-    };
-
-    // Create profile
+    // Start a transaction
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .insert([initialProfile])
+      .insert([{
+        id: userId,
+        full_name: initialData?.full_name || null,
+        linkedin_url: initialData?.linkedin_url || null,
+        job_role: initialData?.job_role || null,
+        career_goals: initialData?.career_goals || [],
+        skills: initialData?.skills || [],
+        interests: initialData?.interests || [],
+        profile_completion_score: 0,
+        seo_optimization_score: 0,
+        updated_at: new Date().toISOString()
+      }])
       .select()
       .single();
 
@@ -101,166 +99,68 @@ export async function createProfile(userId: string, initialData?: Partial<Profil
       throw progressError;
     }
 
-    // Generate and store initial AI content
-    await generateInitialAIContent(profile);
+    // Generate initial AI content
+    const [careerTips, communities, learningResources] = await Promise.all([
+      generateCareerTips(profile),
+      generateCommunityRecommendations(profile),
+      generateLearningResources(profile)
+    ]);
+
+    const timestamp = new Date().toISOString();
+
+    // Insert career tips
+    if (careerTips.length > 0) {
+      const { error: tipsError } = await supabase
+        .from('career_tips')
+        .insert(
+          careerTips.map(tip => ({
+            ...tip,
+            user_id: userId,
+            created_at: timestamp,
+            updated_at: timestamp
+          }))
+        );
+
+      if (tipsError) throw tipsError;
+    }
+
+    // Insert communities
+    if (communities.length > 0) {
+      const { error: communitiesError } = await supabase
+        .from('communities')
+        .insert(
+          communities.map(community => ({
+            ...community,
+            user_id: userId,
+            created_at: timestamp,
+            updated_at: timestamp
+          }))
+        );
+
+      if (communitiesError) throw communitiesError;
+    }
+
+    // Insert learning resources
+    if (learningResources.length > 0) {
+      const { error: resourcesError } = await supabase
+        .from('learning_resources')
+        .insert(
+          learningResources.map(resource => ({
+            ...resource,
+            user_id: userId,
+            created_at: timestamp,
+            updated_at: timestamp
+          }))
+        );
+
+      if (resourcesError) throw resourcesError;
+    }
 
     return profile;
   } catch (error) {
     console.error('Error in createProfile:', error);
     toast.error('Erro ao criar perfil');
     return null;
-  }
-}
-
-async function generateInitialAIContent(profile: Profile) {
-  try {
-    console.log('Generating initial AI content for profile:', profile.id);
-
-    const [careerTips, communities, learningResources] = await Promise.all([
-      generateCareerTips(profile),
-      generateCommunityRecommendations(profile),
-      generateLearningResources(profile)
-    ]);
-
-    const timestamp = new Date().toISOString();
-
-    // Store career tips with user association
-    if (careerTips.length > 0) {
-      const { error: tipsError } = await supabase
-        .from('career_tips')
-        .insert(careerTips.map(tip => ({
-          ...tip,
-          user_id: profile.id,
-          created_at: timestamp,
-          updated_at: timestamp
-        })));
-
-      if (tipsError) {
-        console.error('Error storing career tips:', tipsError);
-        throw tipsError;
-      }
-    }
-
-    // Store communities with user association
-    if (communities.length > 0) {
-      const { error: communitiesError } = await supabase
-        .from('communities')
-        .insert(communities.map(community => ({
-          ...community,
-          user_id: profile.id,
-          created_at: timestamp,
-          updated_at: timestamp
-        })));
-
-      if (communitiesError) {
-        console.error('Error storing communities:', communitiesError);
-        throw communitiesError;
-      }
-    }
-
-    // Store learning resources with user association
-    if (learningResources.length > 0) {
-      const { error: resourcesError } = await supabase
-        .from('learning_resources')
-        .insert(learningResources.map(resource => ({
-          ...resource,
-          user_id: profile.id,
-          created_at: timestamp,
-          updated_at: timestamp
-        })));
-
-      if (resourcesError) {
-        console.error('Error storing learning resources:', resourcesError);
-        throw resourcesError;
-      }
-    }
-
-    console.log('Initial AI content generated and stored successfully');
-  } catch (error) {
-    console.error('Error in generateInitialAIContent:', error);
-    toast.error('Erro ao gerar recomendações iniciais');
-  }
-}
-
-async function regenerateAIContent(profile: Profile) {
-  try {
-    console.log('Regenerating AI content for profile:', profile.id);
-
-    const [careerTips, communities, learningResources] = await Promise.all([
-      generateCareerTips(profile),
-      generateCommunityRecommendations(profile),
-      generateLearningResources(profile)
-    ]);
-
-    const timestamp = new Date().toISOString();
-
-    // Update career tips
-    if (careerTips.length > 0) {
-      // First, delete existing tips for this user
-      await supabase
-        .from('career_tips')
-        .delete()
-        .eq('user_id', profile.id);
-
-      // Then insert new ones
-      const { error: tipsError } = await supabase
-        .from('career_tips')
-        .insert(careerTips.map(tip => ({
-          ...tip,
-          user_id: profile.id,
-          created_at: timestamp,
-          updated_at: timestamp
-        })));
-
-      if (tipsError) throw tipsError;
-    }
-
-    // Update communities
-    if (communities.length > 0) {
-      // First, delete existing communities for this user
-      await supabase
-        .from('communities')
-        .delete()
-        .eq('user_id', profile.id);
-
-      // Then insert new ones
-      const { error: communitiesError } = await supabase
-        .from('communities')
-        .insert(communities.map(community => ({
-          ...community,
-          user_id: profile.id,
-          created_at: timestamp,
-          updated_at: timestamp
-        })));
-
-      if (communitiesError) throw communitiesError;
-    }
-
-    // Update learning resources
-    if (learningResources.length > 0) {
-      // First, delete existing resources for this user
-      await supabase
-        .from('learning_resources')
-        .delete()
-        .eq('user_id', profile.id);
-
-      // Then insert new ones
-      const { error: resourcesError } = await supabase
-        .from('learning_resources')
-        .insert(learningResources.map(resource => ({
-          ...resource,
-          user_id: profile.id,
-          created_at: timestamp,
-          updated_at: timestamp
-        })));
-
-      if (resourcesError) throw resourcesError;
-    }
-
-    console.log('AI content regenerated successfully');
-  } catch (error) {
-    console.error('Error in regenerateAIContent:', error);
-    toast.error('Erro ao atualizar recomendações');
   }
 }
 
@@ -323,9 +223,6 @@ export async function updateProfile(updates: Partial<Profile>): Promise<Profile 
       console.error('Error updating user progress:', progressError);
       throw progressError;
     }
-
-    // Regenerate AI content based on updated profile
-    await regenerateAIContent(data);
 
     console.log('Profile updated successfully');
     toast.success('Perfil atualizado com sucesso');

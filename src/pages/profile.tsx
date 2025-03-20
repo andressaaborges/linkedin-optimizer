@@ -324,7 +324,7 @@ export default function ProfilePage() {
               disabled={isSubmitting}
             >
               <Save className="w-5 h-5 mr-2" />
-              Salvar Perfil
+              {isSubmitting ? 'Salvando...' : 'Salvar Perfil'}
             </button>
           </div>
         </form>
